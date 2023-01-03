@@ -13,7 +13,7 @@ int bluetoothTx = 3;  // bluetooth tx to 3 pin
 SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
 
 //Start L298N pin
-int StartMotors = 7;
+int start_motors = A3;
 
 //Front Motor Pins
 int Enable1 = 8;
@@ -46,6 +46,7 @@ void setup() {
   s.write(180);  // Inicia motor posição zero
 
   //Setting the L298N and LED pins as output pins.
+  pinMode(start_motors, OUTPUT);
   pinMode(Motor1_Pin1, OUTPUT);
   pinMode(Motor1_Pin2, OUTPUT);
   pinMode(Enable1, OUTPUT);
@@ -63,6 +64,7 @@ void setup() {
 }
 
 void loop() {
+
    if (bluetooth.available() > 0) {  //Checking if there is some data available or not
      command = bluetooth.read();     //Storing the data in the 'command' variable
      Serial.print(command);        //Printing it on the serial monitor
@@ -70,10 +72,10 @@ void loop() {
      //Change pin mode only if new command is different from previous.
      switch (command) {
        case 'M':  //Start L298N board
-         digitalWrite(StartMotors, HIGH);
+         digitalWrite(start_motors, HIGH);
          break;
        case 'm':  //stop L298N board
-         digitalWrite(StartMotors, LOW);
+         digitalWrite(start_motors, LOW);
          break;
        case 'f':  //Moving the Car Forward
          digitalWrite(Motor2_Pin1, HIGH);
